@@ -9,13 +9,13 @@ arg=$(echo "${args[0]}" | sed 's/\//\\\//g')
 
 
 help_message() {
-    echo -e "wt lets you switch between your git worktrees with speed.\n"
+    echo -e "wts lets you switch between your git worktrees with speed.\n"
 	  echo "Usage:"
-	  echo -e "\twt <worktree-name>: search for worktree names and change to that directory."
-	  echo -e "\twt list: list out all the git worktrees."
-	  echo -e "\twt update: update to the latest release of worktree switcher."
-	  echo -e "\twt version: show the CLI version."
-	  echo -e "\twt help: shows this help message." 
+	  echo -e "\twts <worktree-name>: search for worktree names and change to that directory."
+	  echo -e "\twts list: list out all the git worktrees."
+	  echo -e "\twts update: update to the latest release of worktree switcher."
+	  echo -e "\twts version: show the CLI version."
+	  echo -e "\twts help: shows this help message." 
 }
 
 
