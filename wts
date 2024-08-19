@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+set -e
+
+args=("$@")
+VERSION="0.1.0"
+TMP_PATH=$(mktemp)
+
+arg=$(echo "${args[0]}" | sed 's/\//\\\//g')
+
+
+help_message() {
+    echo -e "wt lets you switch between your git worktrees with speed.\n"
+	  echo "Usage:"
+	  echo -e "\twt <worktree-name>: search for worktree names and change to that directory."
+	  echo -e "\twt list: list out all the git worktrees."
+	  echo -e "\twt update: update to the latest release of worktree switcher."
+	  echo -e "\twt version: show the CLI version."
+	  echo -e "\twt help: shows this help message." 
+}
+
+
+goto_main_worktree() {
+    main_worktree=$(git worktree list --porcelain | grep -E 'worktree ' | awk '{print $0; exit}' | cut -d ' ' -f2-)
+
+    if [ -z "main_worktree" ]; then 
+        :
+    else
+        echo Changing to main worktree at: "$main_worktree"
+        cd "$main_worktree"
+        exec $SHELL
+    fi
+}
+
+
+if [ -z "${args[0]}" ]; then
+    help_message
+    exit 0
+fi
+
+
+case "${args[0]}" in 
+list)
+    git worktree list
+    ;;
+help)
+    help_message
+    ;;
+version)
+    echo Version: $VERSION
+    ;;
+-)
+    goto_main_worktree
+    ;;
+*)
+    directory=$(git worktree list --porcelain | grep -E 'worktree ' | awk '/'"$arg"'/ {print; exit}' | cut -d ' ' -f2-)
+    ;;
+esac
+
+
+change_worktree() {
+    echo Changing to worktree at: "$directory"
+    cd "$directory"
+    exec $SHELL
+}
+
+
+if [ -z "$directory" ]; then
+    :
+else
+    change_worktree
+fi
